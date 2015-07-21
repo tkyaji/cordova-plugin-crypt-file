@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+  id="com.tkyaji.cordova.cryptfile"
+  version="0.0.1">
+
+    <name>CordovaCrypt</name>
+    <description>Plugin Description</description>
+    <author>@tkyaji</author>
+    <license>Apache 2.0 License</license>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+		    <feature name="CDVCrypt">
+			    <param name="ios-package" value="CDVCrypt"/>
+			    <param name="onload" value="true"/>
+		    </feature>
+        </config-file>
+
+        <header-file src="src/ios/CDVCrypt.h" />
+        <source-file src="src/ios/CDVCrypt.m" />
+        <header-file src="src/ios/CDVCryptURLProtocol.h" />
+        <source-file src="src/ios/CDVCryptURLProtocol.m" />
+
+        <hook type="after_prepare" src="hooks/after_prepare.js" />
+    </platform>
+
+    <platform name="android">
+        <config-file target="config.xml" parent="/*">
+            <feature name="DecryptResource">
+                <param name="android-package" value="com.tkyaji.cordova.DecryptResource" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/com/tkyaji/cordova/DecryptResource.java" target-dir="src/com/tkyaji/cordova" />
+
+        <hook type="after_prepare" src="hooks/after_prepare.js" />
+    </platform>
+
+</plugin>
