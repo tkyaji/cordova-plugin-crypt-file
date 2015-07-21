@@ -1,2 +1,2 @@
-# com.tkyaji.cordova.crypt-file
+# cordova-plugin-crypt-file
 Cordova Plugin
