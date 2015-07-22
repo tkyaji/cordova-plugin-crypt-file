@@ -21,3 +21,4 @@ or
 ##Supported platforms
 * iOS
 * Android
+* CrossWalk
