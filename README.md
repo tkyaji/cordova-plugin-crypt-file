@@ -2,7 +2,7 @@
 HTML source file is encrypted at build, and decrypted at run.  
 
 ##Add Plugin
-`cordova plugin add https://github.com/tkyaji/cordova-plugin-crypt-file.git#master`
+`cordova plugin add cordova-plugin-crypt-file`
 
 ## Encrypt
 `cordova build [ios / android]`
