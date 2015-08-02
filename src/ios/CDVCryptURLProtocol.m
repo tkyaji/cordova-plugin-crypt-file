@@ -37,8 +37,10 @@ static NSString* const kCryptIv = @"";
         
         NSError* error;
         NSString* content = [[NSString alloc] initWithContentsOfFile:url.path encoding:NSUTF8StringEncoding error:&error];
-        NSData* data = [self decryptAES256WithKey:kCryptKey iv:kCryptIv data:content];
-        [self sendResponseWithResponseCode:200 data:data mimeType:mimeType];
+        if (!error) {
+            NSData* data = [self decryptAES256WithKey:kCryptKey iv:kCryptIv data:content];
+            [self sendResponseWithResponseCode:200 data:data mimeType:mimeType];
+        }
     }
     
     [super startLoading];
