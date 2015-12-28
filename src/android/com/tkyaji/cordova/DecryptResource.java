@@ -40,6 +40,9 @@ public class DecryptResource extends CordovaPlugin {
     @Override
     public Uri remapUri(Uri uri) {
         this.launchUri = uri.toString();
+        if (!this.launchUri.toString().startsWith(URL_PREFIX)) {
+            return uri;
+        }
         return Uri.parse("cdvplugin://DecryptResource");
     }
 
