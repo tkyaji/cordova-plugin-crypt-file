@@ -61,26 +61,27 @@ module.exports = function(context) {
 
     var path              = context.requireCordovaModule('path'),
         fs                = context.requireCordovaModule('fs'),
-        Q                 = context.requireCordovaModule('q'),
         crypto            = context.requireCordovaModule('crypto'),
+        Q                 = context.requireCordovaModule('q'),
         cordova_util      = context.requireCordovaModule('cordova-lib/src/cordova/util'),
-        platform          = context.requireCordovaModule('cordova-lib/src/cordova/platform'),
         platforms         = context.requireCordovaModule('cordova-lib/src/platforms/platforms'),
-        ConfigParser      = context.requireCordovaModule('cordova-lib/src/configparser/ConfigParser');
+        Parser            = context.requireCordovaModule('cordova-lib/src/cordova/metadata/parser'),
+        ParserHelper      = context.requireCordovaModule('cordova-lib/src/cordova/metadata/parserhelper/ParserHelper'),
+        ConfigParser      = context.requireCordovaModule('cordova-common').ConfigParser;
 
     var deferral = new Q.defer();
     var projectRoot = cordova_util.cdProjectRoot();
-    var platformsOnFs = cordova_util.listPlatforms(projectRoot);
 
     var key = crypto.randomBytes(24).toString('base64');
     var iv = crypto.randomBytes(12).toString('base64');
 
     console.log("key=" + key + ", iv=" + iv)
 
-    platformsOnFs.map(function(platform) {
+    context.opts.platforms.map(function(platform) {
         var platformPath = path.join(projectRoot, 'platforms', platform);
-        var parser = platforms.getPlatformProject(platform, platformPath);
-        var wwwDir = parser.www_dir()
+        var platformApi = platforms.getPlatformApi(platform, platformPath);
+        var platformInfo = platformApi.getPlatformInfo();
+        var wwwDir = platformInfo.locations.www;
 
         findCryptoFiles(context, wwwDir).forEach(function(file) {
             var content = fs.readFileSync(file, 'utf-8');
@@ -88,17 +89,17 @@ module.exports = function(context) {
             console.log("encrypt: " + file);
         });
 
-        var platformPath = path.join(projectRoot, 'platforms', platform);
-        var project = parser.parseProjectFile(platformPath);
         if (platform == 'ios') {
-            var pluginDir = path.join(project.xcode_path, 'Plugins', context.opts.plugin.id);
+            var ios_parser = context.requireCordovaModule('cordova-lib/src/cordova/metadata/ios_parser');
+            var iosParser = new ios_parser(platformPath);
+            var pluginDir = path.join(iosParser.cordovaproj, 'Plugins', context.opts.plugin.id);
             replaceCryptKey_ios(pluginDir, key, iv);
 
         } else if (platform == 'android') {
-            var pluginDir = path.join(project.projectDir, 'src');
+            var pluginDir = path.join(platformPath, 'src');
             replaceCryptKey_android(pluginDir, key, iv);
 
-            var cfg = new ConfigParser(parser.config_xml());
+            var cfg = new ConfigParser(platformInfo.projectConfig.path);
             cfg.doc.getroot().getchildren().filter(function(child, idx, arr) {
                 return (child.tag == 'content');
             }).map(function(child) {
