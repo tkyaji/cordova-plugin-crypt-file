@@ -23,3 +23,6 @@ or
 * iOS
 * Android
 * CrossWalk
+
+##License
+Apache version 2.0
