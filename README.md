@@ -2,7 +2,7 @@
 HTML source file is encrypted at build, and decrypted at run.  
 https://www.npmjs.com/package/cordova-plugin-crypt-file
 
-##Add Plugin
+## Add Plugin
 `cordova plugin add cordova-plugin-crypt-file`
 
 ## Encrypt
@@ -13,16 +13,16 @@ https://www.npmjs.com/package/cordova-plugin-crypt-file
 or  
 `cordova run [ios / android]`  
 
-##Encryption subjects.
+## Encryption subjects.
 * .html
 * .htm
 * .js
 * .css
 
-##Supported platforms
+## Supported platforms
 * iOS
 * Android
 * CrossWalk
 
-##License
+## License
 Apache version 2.0
