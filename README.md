@@ -24,5 +24,9 @@ or
 * Android
 * CrossWalk
 
+## Before reporting your issue
+It would be very helpful if you show me your project (If you have GitHub repository, that URL would be nice).
+It is very hard for me to reporduce your enviroment.
+
 ## License
 Apache version 2.0
