@@ -48,7 +48,7 @@ public class DecryptResource extends CordovaPlugin {
 
     @Override
     public CordovaResourceApi.OpenForReadResult handleOpenForRead(Uri uri) throws IOException {
-        String uriStr = this.tofileUri(this.launchUri);
+        String uriStr = this.tofileUri(this.launchUri.split("\\?")[0]);
         CordovaResourceApi.OpenForReadResult readResult =  this.webView.getResourceApi().openForRead(Uri.parse(uriStr), true);
 
         if (!isCryptFiles(uriStr)) {
