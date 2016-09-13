@@ -20,6 +20,8 @@
         <source-file src="src/ios/CDVCrypt.m" />
         <header-file src="src/ios/CDVCryptURLProtocol.h" />
         <source-file src="src/ios/CDVCryptURLProtocol.m" />
+
+        <hook type="after_prepare" src="hooks/after_prepare.js" />
     </platform>
 
     <platform name="android">
@@ -31,8 +33,8 @@
         </config-file>
 
         <source-file src="src/android/com/tkyaji/cordova/DecryptResource.java" target-dir="src/com/tkyaji/cordova" />
-    </platform>
 
-    <hook type="after_prepare" src="hooks/after_prepare.js" />
+        <hook type="after_prepare" src="hooks/after_prepare.js" />
+    </platform>
 
 </plugin>
