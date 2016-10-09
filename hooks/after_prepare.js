@@ -107,6 +107,17 @@ module.exports = function(context) {
                     child.attrib.src = 'http://localhost/' + child.attrib.src;
                 }
             });
+
+            // for ionic
+            var navigations = cfg.getAllowNavigations();
+            if (!navigations.some(function(nav, index, array) { return (nav.href == 'http://localhost/*'); })) {
+                cfg.addElement('allow-navigation' ,{href: 'http://localhost/*'});
+            }
+            var navigations = cfg.getAllowNavigations();
+            if (!navigations.some(function(nav, index, array) { return (nav.href == 'https://localhost/*'); })) {
+                cfg.addElement('allow-navigation' ,{href: 'https://localhost/*'});
+            }
+
             cfg.write();
         }
     });
