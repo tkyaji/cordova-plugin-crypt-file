@@ -31,6 +31,11 @@
                 <param name="onload" value="true" />
             </feature>
         </config-file>
+		
+		<config-file>
+			<allow-navigation href="http://localhost/*" />
+    			<allow-navigation href="https://localhost/*" />
+		</config-file>
 
         <source-file src="src/android/com/tkyaji/cordova/DecryptResource.java" target-dir="src/com/tkyaji/cordova" />
 
