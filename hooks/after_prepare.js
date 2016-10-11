@@ -103,20 +103,8 @@ module.exports = function(context) {
             cfg.doc.getroot().getchildren().filter(function(child, idx, arr) {
                 return (child.tag == 'content');
             }).map(function(child) {
-                if (!child.attrib.src .match(/^https?:\/\//)) {
-                    child.attrib.src = 'http://localhost/' + child.attrib.src;
-                }
+                child.attrib.src = '////' + child.attrib.src;
             });
-
-            // for ionic
-            var navigations = cfg.getAllowNavigations();
-            if (!navigations.some(function(nav, index, array) { return (nav.href == 'http://localhost/*'); })) {
-                cfg.addElement('allow-navigation' ,{href: 'http://localhost/*'});
-            }
-            var navigations = cfg.getAllowNavigations();
-            if (!navigations.some(function(nav, index, array) { return (nav.href == 'https://localhost/*'); })) {
-                cfg.addElement('allow-navigation' ,{href: 'https://localhost/*'});
-            }
 
             cfg.write();
         }
