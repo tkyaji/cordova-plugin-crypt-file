@@ -24,11 +24,6 @@ or
 * Android
 * CrossWalk
 
-## Note (for Android)
-This plugin will replace url `file:///android_aset/www` into `http://localhost/` for the android.
-
-Ex: index.html -> http://localhost/index.html
-
 ## Before reporting your issue
 It would be very helpful if you show me your project (If you have GitHub repository, that URL would be nice).
 It is very hard for me to reporduce your enviroment.
