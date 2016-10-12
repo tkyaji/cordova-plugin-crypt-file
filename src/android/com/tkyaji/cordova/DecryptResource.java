@@ -47,7 +47,7 @@ public class DecryptResource extends CordovaPlugin {
     @Override
     public CordovaResourceApi.OpenForReadResult handleOpenForRead(Uri uri) throws IOException {
         Uri oriUri = this.fromPluginUri(uri);
-        String uriStr = oriUri.toString().replace("/+++/", "/");
+        String uriStr = oriUri.toString().replace("/+++/", "/").split("\\?")[0];
 
         CordovaResourceApi.OpenForReadResult readResult =  this.webView.getResourceApi().openForRead(Uri.parse(uriStr), true);
 
