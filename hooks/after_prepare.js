@@ -77,7 +77,10 @@ module.exports = function(context) {
 
     console.log("key=" + key + ", iv=" + iv)
 
-    context.opts.platforms.map(function(platform) {
+    context.opts.platforms.filter(function(platform) {
+        var pluginInfo = context.opts.plugin.pluginInfo;
+        return pluginInfo.getPlatformsArray().indexOf(platform) > -1;
+    }).map(function(platform) {
         var platformPath = path.join(projectRoot, 'platforms', platform);
         var platformApi = platforms.getPlatformApi(platform, platformPath);
         var platformInfo = platformApi.getPlatformInfo();
