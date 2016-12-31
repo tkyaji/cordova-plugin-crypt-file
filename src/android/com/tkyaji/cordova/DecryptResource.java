@@ -12,6 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -23,17 +24,10 @@ public class DecryptResource extends CordovaPlugin {
 
     private static final String TAG = "DecryptResource";
 
-    private static final String URL_PREFIX = "http://localhost/";
-
     private static final String CRYPT_KEY = "";
     private static final String CRYPT_IV = "";
-
-    private static final String[] CRYPT_FILES = {
-        ".htm",
-        ".html",
-        ".js",
-        ".css",
-    };
+    private static final String[] INCLUDE_FILES = new String[] { };
+    private static final String[] EXCLUDE_FILES = new String[] { };
 
     @Override
     public Uri remapUri(Uri uri) {
@@ -84,19 +78,20 @@ public class DecryptResource extends CordovaPlugin {
                 readResult.uri, byteInputStream, readResult.mimeType, readResult.length, readResult.assetFd);
     }
 
-    private String tofileUri(String uri) {
-        if (uri.startsWith(URL_PREFIX)) {
-            uri = uri.replace(URL_PREFIX, "file:///android_asset/www/");
+    private boolean isCryptFiles(String uri) {
+        String checkPath = uri.replace("file:///android_asset/www/", "");
+        if (!this.hasMatch(checkPath, INCLUDE_FILES)) {
+            return false;
         }
-        if (uri.endsWith("/")) {
-            uri += "index.html";
+        if (this.hasMatch(checkPath, EXCLUDE_FILES)) {
+            return false;
         }
-        return uri;
+        return true;
     }
 
-    private boolean isCryptFiles(String uri) {
-        for (String ext: CRYPT_FILES) {
-            if (uri.endsWith(ext)) {
+    private boolean hasMatch(String text, String[] regexArr) {
+        for (String regex : regexArr) {
+            if (Pattern.compile(regex).matcher(text).find()) {
                 return true;
             }
         }

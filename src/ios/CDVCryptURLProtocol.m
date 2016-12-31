@@ -16,6 +16,11 @@
 static NSString* const kCryptKey = @"";
 static NSString* const kCryptIv = @"";
 
+static int const kIncludeFileLength = 0;
+static int const kExcludeFileLength = 0;
+static NSString* const kIncludeFiles[] = { };
+static NSString* const kExcludeFiles[] = { };
+
 
 @implementation CDVCryptURLProtocol
 
@@ -50,12 +55,40 @@ static NSString* const kCryptIv = @"";
     if (![url.scheme isEqual: @"file"]) {
         return NO;
     }
-    NSString *extension = url.pathExtension;
-    NSArray *extArray = @[@"html", @"htm", @"css", @"js"];
-    for (NSString* ext in extArray) {
-        if ([extension isEqualToString:ext]) {
+
+    NSLog(@"%@", url.path);
+    
+    NSString *wwwPath = [[NSBundle mainBundle].resourcePath stringByAppendingString:@"/www/"];
+    NSString *checkPath = [url.path stringByReplacingOccurrencesOfString:wwwPath withString:@""];
+    
+    if (![self hasMatch:checkPath regexArr:kIncludeFiles length:kIncludeFileLength]) {
+        return NO;
+    }
+    if ([self hasMatch:checkPath regexArr:kExcludeFiles length:kExcludeFileLength]) {
+        return NO;
+    }
+
+    return YES;
+}
+
++ (BOOL)hasMatch:(NSString *)text regexArr:(NSString* const [])regexArr length:(int)length {
+    for (int i = 0; i < length; i++) {
+        NSString* const regex = regexArr[i];
+        if ([self isMatch:text pattern:regex]) {
             return YES;
         }
+    }
+    return NO;
+}
+
++ (BOOL)isMatch:(NSString *)text pattern:(NSString *)pattern {
+    NSError *error = nil;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&error];
+    if (error) {
+        return NO;
+    }
+    if ([regex firstMatchInString:text options:0 range:NSMakeRange(0, text.length)]) {
+        return YES;
     }
     return NO;
 }
