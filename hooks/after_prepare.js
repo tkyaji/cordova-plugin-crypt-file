@@ -16,7 +16,7 @@ module.exports = function(context) {
     var key = crypto.randomBytes(24).toString('base64');
     var iv = crypto.randomBytes(12).toString('base64');
 
-    console.log("key=" + key + ", iv=" + iv)
+    console.log('key=' + key + ', iv=' + iv)
 
     var targetFiles = loadCryptFileTargets();
 
@@ -35,7 +35,7 @@ module.exports = function(context) {
         }).forEach(function(file) {
             var content = fs.readFileSync(file, 'utf-8');
             fs.writeFileSync(file, encryptData(content, key, iv), 'utf-8');
-            console.log("encrypt: " + file);
+            console.log('encrypt: ' + file);
         });
 
         if (platform == 'ios') {
@@ -94,12 +94,12 @@ module.exports = function(context) {
         if (cryptfiles.length > 0) {
             cryptfiles[0]._children.forEach(function(elm) {
                 elm._children.filter(function(celm) {
-                    return celm.tag == 'file';
+                    return celm.tag == 'file' && celm.attrib.regex && celm.attrib.regex.trim().length > 0;
                 }).forEach(function(celm) {
                     if (elm.tag == 'include') {
-                        include.push(celm.text);
+                        include.push(celm.attrib.regex.trim());
                     } else if (elm.tag == 'exclude') {
-                        exclude.push(celm.text);
+                        exclude.push(celm.attrib.regex.trim());
                     }
                 });
             })

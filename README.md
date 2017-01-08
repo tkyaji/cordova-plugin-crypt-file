@@ -31,10 +31,10 @@ You can specify the encryption subjects by editing `plugin.xml`.
 ```
 <cryptfiles>
     <include>
-        <file>\.(htm|html|js|css)$</file>
+        <file regex="\.(htm|html|js|css)$" />
     </include>
     <exclude>
-        <file>exclude_file\.js$</file>
+        <file regex="exclude_file\.js$" />
     </exclude>
 </cryptfiles>
 ```
