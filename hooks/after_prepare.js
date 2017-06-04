@@ -39,9 +39,19 @@ module.exports = function(context) {
         });
 
         if (platform == 'ios') {
-            var ios_parser = context.requireCordovaModule('cordova-lib/src/cordova/metadata/ios_parser');
-            var iosParser = new ios_parser(platformPath);
-            var pluginDir = path.join(iosParser.cordovaproj, 'Plugins', context.opts.plugin.id);
+            var pluginDir;
+            try {
+              var ios_parser = context.requireCordovaModule('cordova-lib/src/cordova/metadata/ios_parser'),
+                  iosParser = new ios_parser(platformPath);
+              pluginDir = path.join(iosParser.cordovaproj, 'Plugins', context.opts.plugin.id);
+            } catch (err) {
+              var xcodeproj_dir = fs.readdirSync(platformPath).filter(function(e) { return e.match(/\.xcodeproj$/i); })[0],
+                  xcodeproj = path.join(platformPath, xcodeproj_dir),
+                  originalName = xcodeproj.substring(xcodeproj.lastIndexOf(path.sep)+1, xcodeproj.indexOf('.xcodeproj')),
+                  cordovaproj = path.join(platformPath, originalName);
+
+              pluginDir = path.join(cordovaproj, 'Plugins', context.opts.plugin.id);
+            }
             replaceCryptKey_ios(pluginDir, key, iv);
 
         } else if (platform == 'android') {
