@@ -22,7 +22,8 @@ module.exports = function(context) {
     var publicKey = keypair.exportKey("pkcs8-public");
     publicKey = publicKey.replace("-----BEGIN PUBLIC KEY-----", "");
     publicKey = publicKey.replace("-----END PUBLIC KEY-----", "");
-    console.log(publicKey);
+    
+    console.log(new Buffer(publicKey).toString("hex"));
     console.log(keypair.exportKey("pkcs8-private"));
     console.log('key=' + key + ', iv=' + iv)
 
