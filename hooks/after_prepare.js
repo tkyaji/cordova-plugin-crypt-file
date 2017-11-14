@@ -19,8 +19,12 @@ module.exports = function(context) {
     var key = crypto.randomBytes(24).toString('base64');
     var iv = crypto.randomBytes(12).toString('base64');
 
+    var testMessage = "hello this is cs";
     console.log(keypair.exportKey("pkcs8-public"));
     console.log(keypair.exportKey("pkcs8-private"));
+    console.log(keypair.encrypt(testMessage, "base64"));
+    console.log("======");
+    console.log(keypair.encrypt(testMessage, "utf8"));
     console.log('key=' + key + ', iv=' + iv)
 
     var targetFiles = loadCryptFileTargets();
