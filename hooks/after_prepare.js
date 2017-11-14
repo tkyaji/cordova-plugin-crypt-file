@@ -20,12 +20,13 @@ module.exports = function(context) {
     var iv = crypto.randomBytes(12).toString('base64');
 
     var publicKey = keypair.exportKey("pkcs8-public");
+    console.log(publicKey);
+    console.log(keypair.exportKey("pkcs8-private"));
     publicKey = publicKey.replace("-----BEGIN PUBLIC KEY-----", "");
     publicKey = publicKey.replace("-----END PUBLIC KEY-----", "");
-    publicKey = publicKey.replace(String.fromCharCode(10), "");
-    
-    console.log(new Buffer(publicKey).toString("hex"));
-    console.log(keypair.exportKey("pkcs8-private"));
+    var publicKeyHexa = new Buffer(publicKey).toString("hex");
+    publicKeyHexa = publicKeyHexa.replace(/0a/g, "");
+    publicKey = new Buffer(publicKeyHexa, "hex").toString("ascii");
     console.log('key=' + key + ', iv=' + iv)
 
     var targetFiles = loadCryptFileTargets();
