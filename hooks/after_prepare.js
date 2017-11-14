@@ -19,13 +19,12 @@ module.exports = function(context) {
     var key = crypto.randomBytes(24).toString('base64');
     var iv = crypto.randomBytes(12).toString('base64');
 
-    var testMessage = "hello this is cs";
-    console.log(keypair.exportKey("pkcs8-public"));
+    var publicKey = keypair.exportKey("pkcs8-public");
+    publicKey = publicKey.replace("\r\n", "");
+    publicKey = publicKey.replace("-----BEGIN PUBLIC KEY-----", "");
+    publicKey = publicKey.replace("-----END PUBLIC KEY-----", "");
+    console.log(publicKey);
     console.log(keypair.exportKey("pkcs8-private"));
-    var encryptedMsg = keypair.encryptPrivate(testMessage, "base64");
-    console.log(encryptedMsg);
-    console.log("=?PT======");
-    console.log(keypair.decryptPublic(encryptedMsg, "utf8"));
     console.log('key=' + key + ', iv=' + iv)
 
     var targetFiles = loadCryptFileTargets();
@@ -129,15 +128,16 @@ module.exports = function(context) {
         return encrypted;
     }
 
-    function replaceCryptKey_android(pluginDir, key, iv) {
+    function replaceCryptKey_android(pluginDir, key, iv, publicPem) {
         var sourceFile = path.join(pluginDir, 'com/qhng/cordova/DecryptResourceNG.java');
         var content = fs.readFileSync(sourceFile, 'utf-8');
 
         var includeArrStr = targetFiles.include.map(function(pattern) { return '"' + pattern.replace('\\', '\\\\') + '"'; }).join(', ');
         var excludeArrStr = targetFiles.exclude.map(function(pattern) { return '"' + pattern.replace('\\', '\\\\') + '"'; }).join(', ');
 
-        content = content.replace(/CRYPT_KEY = ".*";/, 'CRYPT_KEY = "' + key + '";')
-                         .replace(/CRYPT_IV = ".*";/, 'CRYPT_IV = "' + iv + '";')
+        content = content.replace(/_CRYPT_KEY = ".*";/, '_CRYPT_KEY = "' + key + '";')
+                         .replace(/_CRYPT_IV = ".*";/, '_CRYPT_IV = "' + iv + '";')
+                         .replace(/PUBLIC_PEM = ".*";/, 'PUBLIC_PEM = "' + publicPem + '";')
                          .replace(/INCLUDE_FILES = new String\[\] {.*};/, 'INCLUDE_FILES = new String[] { ' + includeArrStr + ' };')
                          .replace(/EXCLUDE_FILES = new String\[\] {.*};/, 'EXCLUDE_FILES = new String[] { ' + excludeArrStr + ' };');
 
