@@ -19,15 +19,30 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
+
 
 public class DecryptResourceNG extends CordovaPlugin {
 
     private static final String TAG = "DecryptResourceNG";
 
-    private static final String CRYPT_KEY = "";
-    private static final String CRYPT_IV = "";
+    private static final String PUBLIC_PEM = "";
+    private static final String _CRYPT_KEY = "";
+    private static final String _CRYPT_IV = "";
     private static final String[] INCLUDE_FILES = new String[] { };
     private static final String[] EXCLUDE_FILES = new String[] { };
+    private final String CRYPT_KEY;
+    private final String CRYPT_IV;
+
+    public DecryptResourceNG() throws Exception {
+        PublicKey pubKey = PublicKeyReader.get(PUBLIC_PEM);
+        Cipher rsa = Cipher.getInstance("RSA");
+        rsa.init(Cipher.DECRYPT_MODE, pubKey);
+        CRYPT_KEY = _CRYPT_KEY;
+        CRYPT_IV = _CRYPT_IV;
+    }
 
     @Override
     public Uri remapUri(Uri uri) {
@@ -96,5 +111,14 @@ public class DecryptResourceNG extends CordovaPlugin {
             }
         }
         return false;
+    }
+}
+
+class PublicKeyReader {
+    public static PublicKey get(String publicPemStr) throws Exception {
+        byte[] keyBytes = Base64.decode(publicPemStr, Base64.DEFAULT);
+        X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
+        KeyFactory kf = KeyFactory.getInstance("RSA");
+        return kf.generatePublic(spec);
     }
 }
