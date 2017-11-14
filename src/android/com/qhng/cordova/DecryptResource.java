@@ -1,4 +1,4 @@
-package com.tkyaji.cordova;
+package com.qhng.cordova;
 
 import android.net.Uri;
 import android.util.Base64;
@@ -62,12 +62,13 @@ public class DecryptResource extends CordovaPlugin {
         LOG.d(TAG, "decrypt: " + uriStr);
         ByteArrayInputStream byteInputStream = null;
         try {
-            SecretKey skey = new SecretKeySpec(CRYPT_KEY.getBytes("UTF-8"), "AES");
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            cipher.init(Cipher.DECRYPT_MODE, skey, new IvParameterSpec(CRYPT_IV.getBytes("UTF-8")));
+            //SecretKey skey = new SecretKeySpec(CRYPT_KEY.getBytes("UTF-8"), "AES");
+            //cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            //cipher.init(Cipher.DECRYPT_MODE, skey, new IvParameterSpec(CRYPT_IV.getBytes("UTF-8")));
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            bos.write(cipher.doFinal(bytes));
+            //bos.write(cipher.doFinal(bytes));
+            bos.write(bytes);
             byteInputStream = new ByteArrayInputStream(bos.toByteArray());
 
         } catch (Exception ex) {

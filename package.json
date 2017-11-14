@@ -1,16 +1,16 @@
 {
-  "name": "cordova-plugin-crypt-file",
-  "version": "1.3.3",
+  "name": "cordova-plugin-crypt-file-ng",
+  "version": "0.1.0",
   "description": "This plugin to encrypt/decrypt the source files.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tkyaji/cordova-plugin-crypt-file.git"
+    "url": "https://github.com/qhng/cordova-plugin-crypt-file.git"
   },
   "keywords": [
     "ecosystem:cordova",
     "cordova-android",
     "cordova-ios"
   ],
-  "author": "tkyaji",
+  "author": "tkyaji, qhng",
   "license": "Apache version 2.0"
 }
