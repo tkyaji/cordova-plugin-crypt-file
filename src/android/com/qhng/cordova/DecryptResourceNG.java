@@ -20,9 +20,9 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 
-public class DecryptResource extends CordovaPlugin {
+public class DecryptResourceNG extends CordovaPlugin {
 
-    private static final String TAG = "DecryptResource";
+    private static final String TAG = "DecryptResourceNG";
 
     private static final String CRYPT_KEY = "";
     private static final String CRYPT_IV = "";
@@ -62,13 +62,12 @@ public class DecryptResource extends CordovaPlugin {
         LOG.d(TAG, "decrypt: " + uriStr);
         ByteArrayInputStream byteInputStream = null;
         try {
-            //SecretKey skey = new SecretKeySpec(CRYPT_KEY.getBytes("UTF-8"), "AES");
-            //cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            //cipher.init(Cipher.DECRYPT_MODE, skey, new IvParameterSpec(CRYPT_IV.getBytes("UTF-8")));
+            SecretKey skey = new SecretKeySpec(CRYPT_KEY.getBytes("UTF-8"), "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, skey, new IvParameterSpec(CRYPT_IV.getBytes("UTF-8")));
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            //bos.write(cipher.doFinal(bytes));
-            bos.write(bytes);
+            bos.write(cipher.doFinal(bytes));
             byteInputStream = new ByteArrayInputStream(bos.toByteArray());
 
         } catch (Exception ex) {

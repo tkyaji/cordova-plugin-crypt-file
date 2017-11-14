@@ -8,8 +8,7 @@
   },
   "keywords": [
     "ecosystem:cordova",
-    "cordova-android",
-    "cordova-ios"
+    "cordova-android"
   ],
   "author": "tkyaji, qhng",
   "license": "Apache version 2.0"

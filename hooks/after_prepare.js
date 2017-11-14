@@ -38,23 +38,7 @@ module.exports = function(context) {
             console.log('encrypt: ' + file);
         });
 
-        if (platform == 'ios') {
-            var pluginDir;
-            try {
-              var ios_parser = context.requireCordovaModule('cordova-lib/src/cordova/metadata/ios_parser'),
-                  iosParser = new ios_parser(platformPath);
-              pluginDir = path.join(iosParser.cordovaproj, 'Plugins', context.opts.plugin.id);
-            } catch (err) {
-              var xcodeproj_dir = fs.readdirSync(platformPath).filter(function(e) { return e.match(/\.xcodeproj$/i); })[0],
-                  xcodeproj = path.join(platformPath, xcodeproj_dir),
-                  originalName = xcodeproj.substring(xcodeproj.lastIndexOf(path.sep)+1, xcodeproj.indexOf('.xcodeproj')),
-                  cordovaproj = path.join(platformPath, originalName);
-
-              pluginDir = path.join(cordovaproj, 'Plugins', context.opts.plugin.id);
-            }
-            replaceCryptKey_ios(pluginDir, key, iv);
-
-        } else if (platform == 'android') {
+        if (platform == 'android') {
             var pluginDir = path.join(platformPath, 'src');
             replaceCryptKey_android(pluginDir, key, iv);
 
@@ -129,32 +113,14 @@ module.exports = function(context) {
     }
 
     function encryptData(input, key, iv) {
-        //var cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
-        //var encrypted = cipher.update(input, 'utf8', 'base64') + cipher.final('base64');
+        var cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+        var encrypted = cipher.update(input, 'utf8', 'base64') + cipher.final('base64');
 
-        //return encrypted;
-        return new Buffer(input).toString("base64");
-    }
-
-    function replaceCryptKey_ios(pluginDir, key, iv) {
-        var sourceFile = path.join(pluginDir, 'CDVCryptURLProtocol.m');
-        var content = fs.readFileSync(sourceFile, 'utf-8');
-
-        var includeArrStr = targetFiles.include.map(function(pattern) { return '@"' + pattern.replace('\\', '\\\\') + '"'; }).join(', ');
-        var excludeArrStr = targetFiles.exclude.map(function(pattern) { return '@"' + pattern.replace('\\', '\\\\') + '"'; }).join(', ');
-
-        content = content.replace(/kCryptKey = @".*";/, 'kCryptKey = @"' + key + '";')
-                         .replace(/kCryptIv = @".*";/, 'kCryptIv = @"' + iv + '";')
-                         .replace(/kIncludeFiles\[\] = {.*};/, 'kIncludeFiles\[\] = { ' + includeArrStr + ' };')
-                         .replace(/kExcludeFiles\[\] = {.*};/, 'kExcludeFiles\[\] = { ' + excludeArrStr + ' };')
-                         .replace(/kIncludeFileLength = [0-9]+;/, 'kIncludeFileLength = ' + targetFiles.include.length + ';')
-                         .replace(/kExcludeFileLength = [0-9]+;/, 'kExcludeFileLength = ' + targetFiles.exclude.length + ';');
-
-        fs.writeFileSync(sourceFile, content, 'utf-8');
+        return encrypted;
     }
 
     function replaceCryptKey_android(pluginDir, key, iv) {
-        var sourceFile = path.join(pluginDir, 'com/qhng/cordova/DecryptResource.java');
+        var sourceFile = path.join(pluginDir, 'com/qhng/cordova/DecryptResourceNG.java');
         var content = fs.readFileSync(sourceFile, 'utf-8');
 
         var includeArrStr = targetFiles.include.map(function(pattern) { return '"' + pattern.replace('\\', '\\\\') + '"'; }).join(', ');
