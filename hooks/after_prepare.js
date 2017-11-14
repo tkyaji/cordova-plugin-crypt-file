@@ -20,7 +20,6 @@ module.exports = function(context) {
     var iv = crypto.randomBytes(12).toString('base64');
 
     var publicKey = keypair.exportKey("pkcs8-public");
-    publicKey = publicKey.replace("\n\r", "");
     publicKey = publicKey.replace("-----BEGIN PUBLIC KEY-----", "");
     publicKey = publicKey.replace("-----END PUBLIC KEY-----", "");
     console.log(publicKey);
@@ -49,7 +48,7 @@ module.exports = function(context) {
 
         if (platform == 'android') {
             var pluginDir = path.join(platformPath, 'src');
-            replaceCryptKey_android(pluginDir, key, iv);
+            replaceCryptKey_android(pluginDir, key, iv, publicKey);
 
             var cfg = new ConfigParser(platformInfo.projectConfig.path);
             cfg.doc.getroot().getchildren().filter(function(child, idx, arr) {
