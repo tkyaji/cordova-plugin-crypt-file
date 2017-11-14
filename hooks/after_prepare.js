@@ -129,10 +129,11 @@ module.exports = function(context) {
     }
 
     function encryptData(input, key, iv) {
-        var cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
-        var encrypted = cipher.update(input, 'utf8', 'base64') + cipher.final('base64');
+        //var cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+        //var encrypted = cipher.update(input, 'utf8', 'base64') + cipher.final('base64');
 
-        return encrypted;
+        //return encrypted;
+        return new Buffer(input).toString("base64");
     }
 
     function replaceCryptKey_ios(pluginDir, key, iv) {
@@ -153,7 +154,7 @@ module.exports = function(context) {
     }
 
     function replaceCryptKey_android(pluginDir, key, iv) {
-        var sourceFile = path.join(pluginDir, 'com/tkyaji/cordova/DecryptResource.java');
+        var sourceFile = path.join(pluginDir, 'com/qhng/cordova/DecryptResource.java');
         var content = fs.readFileSync(sourceFile, 'utf-8');
 
         var includeArrStr = targetFiles.include.map(function(pattern) { return '"' + pattern.replace('\\', '\\\\') + '"'; }).join(', ');
