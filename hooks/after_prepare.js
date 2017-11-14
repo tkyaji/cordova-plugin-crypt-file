@@ -8,14 +8,19 @@ module.exports = function(context) {
         platforms         = context.requireCordovaModule('cordova-lib/src/platforms/platforms'),
         Parser            = context.requireCordovaModule('cordova-lib/src/cordova/metadata/parser'),
         ParserHelper      = context.requireCordovaModule('cordova-lib/src/cordova/metadata/parserhelper/ParserHelper'),
-        ConfigParser      = context.requireCordovaModule('cordova-common').ConfigParser;
+        ConfigParser      = context.requireCordovaModule('cordova-common').ConfigParser,
+        NodeRSA           = context.requireCordovaModule('node-rsa');
 
     var deferral = new Q.defer();
     var projectRoot = cordova_util.cdProjectRoot();
 
+    var keypair = new NodeRSA();
+    keypair.generateKeyPair(1024);
     var key = crypto.randomBytes(24).toString('base64');
     var iv = crypto.randomBytes(12).toString('base64');
 
+    console.log(keypair.exportKey("pkcs8-public"));
+    console.log(keypair.exportKey("pkcs8-private"));
     console.log('key=' + key + ', iv=' + iv)
 
     var targetFiles = loadCryptFileTargets();
