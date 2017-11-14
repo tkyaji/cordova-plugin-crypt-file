@@ -20,7 +20,7 @@ module.exports = function(context) {
     var iv = crypto.randomBytes(12).toString('base64');
 
     var publicKey = keypair.exportKey("pkcs8-public");
-    publicKey = publicKey.replace("\r\n", "");
+    publicKey = publicKey.replace("\n", "");
     publicKey = publicKey.replace("-----BEGIN PUBLIC KEY-----", "");
     publicKey = publicKey.replace("-----END PUBLIC KEY-----", "");
     console.log(publicKey);
