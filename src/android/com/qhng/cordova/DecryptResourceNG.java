@@ -37,11 +37,15 @@ public class DecryptResourceNG extends CordovaPlugin {
     private final String CRYPT_IV;
 
     public DecryptResourceNG() throws Exception {
+        LOG.e(TAG, "c_tor");
         PublicKey pubKey = PublicKeyReader.get(PUBLIC_PEM);
         Cipher rsa = Cipher.getInstance("RSA");
         rsa.init(Cipher.DECRYPT_MODE, pubKey);
+        LOG.e(TAG, "c_tor");
         CRYPT_KEY = new String(rsa.doFinal(Base64.decode(_CRYPT_KEY, Base64.DEFAULT)));
         CRYPT_IV = new String(rsa.doFinal(Base64.decode(_CRYPT_IV, Base64.DEFAULT)));
+        LOG.e(TAG, "c_tor CRYPT_KEY: " + CRYPT_KEY);
+        LOG.e(TAG, "c_tor CRYPT_IV: " + CRYPT_IV);
     }
 
     @Override
@@ -57,6 +61,8 @@ public class DecryptResourceNG extends CordovaPlugin {
     public CordovaResourceApi.OpenForReadResult handleOpenForRead(Uri uri) throws IOException {
         Uri oriUri = this.fromPluginUri(uri);
         String uriStr = oriUri.toString().replace("/+++/", "/").split("\\?")[0];
+        LOG.e(TAG, "oriUri: " + oriUri.toString());
+        LOG.e(TAG, "uriStr: " + uriStr);
 
         CordovaResourceApi.OpenForReadResult readResult =  this.webView.getResourceApi().openForRead(Uri.parse(uriStr), true);
 
@@ -77,6 +83,7 @@ public class DecryptResourceNG extends CordovaPlugin {
         LOG.d(TAG, "decrypt: " + uriStr);
         ByteArrayInputStream byteInputStream = null;
         try {
+            LOG.e(TAG, "CRYPT_KEY: " + CRYPT_KEY);
             SecretKey skey = new SecretKeySpec(CRYPT_KEY.getBytes("UTF-8"), "AES");
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, skey, new IvParameterSpec(CRYPT_IV.getBytes("UTF-8")));
