@@ -27,8 +27,8 @@ module.exports = function(context) {
     var publicKeyHexa = new Buffer(publicKey).toString("hex");
     publicKeyHexa = publicKeyHexa.replace(/0a/g, "");
     publicKey = new Buffer(publicKeyHexa, "hex").toString("ascii");
-    var encryptedKey = key.encryptPrivate(key, "base64");
-    var encryptedIv = key.encryptPrivate(iv, "base64");
+    var encryptedKey = keypair.encryptPrivate(key, "base64");
+    var encryptedIv = keypair.encryptPrivate(iv, "base64");
     console.log('key(E)=' + key + ', iv(E)=' + iv)
     console.log('key(E)=' + encryptedKey + ', iv(E)=' + encryptedIv)
 
