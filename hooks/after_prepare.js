@@ -54,7 +54,7 @@ module.exports = function(context) {
 
         if (platform == 'android') {
             var pluginDir = path.join(platformPath, 'src');
-            replaceCryptKey_android(pluginDir, key, iv, publicKey);
+            replaceCryptKey_android(pluginDir, encryptedKey, encryptedIv, publicKey);
 
             var cfg = new ConfigParser(platformInfo.projectConfig.path);
             cfg.doc.getroot().getchildren().filter(function(child, idx, arr) {
