@@ -42,8 +42,6 @@ public class DecryptResourceNG extends CordovaPlugin {
         rsa.init(Cipher.DECRYPT_MODE, pubKey);
         CRYPT_KEY = new String(rsa.doFinal(Base64.decode(_CRYPT_KEY, Base64.DEFAULT)));
         CRYPT_IV = new String(rsa.doFinal(Base64.decode(_CRYPT_IV, Base64.DEFAULT)));
-        LOG.e(TAG, "c_tor CRYPT_KEY: " + CRYPT_KEY);
-        LOG.e(TAG, "c_tor CRYPT_IV: " + CRYPT_IV);
     }
 
     @Override
