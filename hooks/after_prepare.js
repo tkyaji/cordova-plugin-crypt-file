@@ -29,7 +29,7 @@ module.exports = function(context) {
     publicKey = new Buffer(publicKeyHexa, "hex").toString("ascii");
     var encryptedKey = keypair.encryptPrivate(key, "base64");
     var encryptedIv = keypair.encryptPrivate(iv, "base64");
-    console.log('key(E)=' + key + ', iv(E)=' + iv)
+    console.log('key(P)=' + key + ', iv(P)=' + iv)
     console.log('key(E)=' + encryptedKey + ', iv(E)=' + encryptedIv)
 
     var targetFiles = loadCryptFileTargets();
