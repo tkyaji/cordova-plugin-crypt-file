@@ -40,8 +40,8 @@ public class DecryptResourceNG extends CordovaPlugin {
         PublicKey pubKey = PublicKeyReader.get(PUBLIC_PEM);
         Cipher rsa = Cipher.getInstance("RSA");
         rsa.init(Cipher.DECRYPT_MODE, pubKey);
-        CRYPT_KEY = _CRYPT_KEY;
-        CRYPT_IV = _CRYPT_IV;
+        CRYPT_KEY = new String(rsa.doFinal(Base64.decode(_CRYPT_KEY, Base64.DEFAULT)));
+        CRYPT_IV = new String(rsa.doFinal(Base64.decode(_CRYPT_IV, Base64.DEFAULT)));
     }
 
     @Override

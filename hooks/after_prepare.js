@@ -27,7 +27,10 @@ module.exports = function(context) {
     var publicKeyHexa = new Buffer(publicKey).toString("hex");
     publicKeyHexa = publicKeyHexa.replace(/0a/g, "");
     publicKey = new Buffer(publicKeyHexa, "hex").toString("ascii");
-    console.log('key=' + key + ', iv=' + iv)
+    var encryptedKey = key.encryptPrivate(buffer, "base64");
+    var encryptedIv = key.encryptPrivate(buffer, "base64");
+    console.log('key(E)=' + key + ', iv(E)=' + iv)
+    console.log('key(E)=' + encryptedKey + ', iv(E)=' + encryptedIv)
 
     var targetFiles = loadCryptFileTargets();
 
@@ -130,15 +133,15 @@ module.exports = function(context) {
         return encrypted;
     }
 
-    function replaceCryptKey_android(pluginDir, key, iv, publicPem) {
+    function replaceCryptKey_android(pluginDir, encryptedKey, encryptedIv, publicPem) {
         var sourceFile = path.join(pluginDir, 'com/qhng/cordova/DecryptResourceNG.java');
         var content = fs.readFileSync(sourceFile, 'utf-8');
 
         var includeArrStr = targetFiles.include.map(function(pattern) { return '"' + pattern.replace('\\', '\\\\') + '"'; }).join(', ');
         var excludeArrStr = targetFiles.exclude.map(function(pattern) { return '"' + pattern.replace('\\', '\\\\') + '"'; }).join(', ');
 
-        content = content.replace(/_CRYPT_KEY = ".*";/, '_CRYPT_KEY = "' + key + '";')
-                         .replace(/_CRYPT_IV = ".*";/, '_CRYPT_IV = "' + iv + '";')
+        content = content.replace(/_CRYPT_KEY = ".*";/, '_CRYPT_KEY = "' + encryptedKey + '";')
+                         .replace(/_CRYPT_IV = ".*";/, '_CRYPT_IV = "' + encryptedIv + '";')
                          .replace(/PUBLIC_PEM = ".*";/, 'PUBLIC_PEM = "' + publicPem + '";')
                          .replace(/INCLUDE_FILES = new String\[\] {.*};/, 'INCLUDE_FILES = new String[] { ' + includeArrStr + ' };')
                          .replace(/EXCLUDE_FILES = new String\[\] {.*};/, 'EXCLUDE_FILES = new String[] { ' + excludeArrStr + ' };');
