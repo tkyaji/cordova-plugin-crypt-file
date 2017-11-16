@@ -1,9 +1,13 @@
-# Cordova crypt file plugin
-HTML source file is encrypted at build, and decrypted at run.  
-https://www.npmjs.com/package/cordova-plugin-crypt-file
+# Cordova crypt file plugin NextGen
+This is an extension to [tkyaji's cordova-plugin-crypt-file](https://github.com/tkyaji/cordova-plugin-crypt-file) implementation to encrypt HTML assets during build and to decrypt the required assets during runtime.
+
+The original implementation can also be found on https://www.npmjs.com/package/cordova-plugin-crypt-file.
+
+## Requires node-rsa
+`npm install -g node-rsa`
 
 ## Add Plugin
-`cordova plugin add cordova-plugin-crypt-file`
+`cordova plugin add https://github.com/qhng/cordova-plugin-crypt-file`
 
 ## Encrypt
 `cordova build [ios / android]`
@@ -43,9 +47,7 @@ Specify the target file as a regular expression.
 
 
 ## Supported platforms
-* iOS
 * Android
-* CrossWalk
 
 ## Before reporting your issue
 It would be very helpful if you show me your project (If you have GitHub repository, that URL would be nice).
