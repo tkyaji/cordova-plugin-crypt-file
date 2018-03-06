@@ -31,7 +31,7 @@ module.exports = function(context) {
         var wwwDir = platformInfo.locations.www;
 
         findCryptFiles(wwwDir).filter(function(file) {
-            return isCryptFile(file.replace(wwwDir, ''));
+            return isCryptFile(file.replace(wwwDir + '/', '').replace(wwwDir + '\\', '').replace(wwwDir, ''));
         }).forEach(function(file) {
             var content = fs.readFileSync(file, 'utf-8');
             fs.writeFileSync(file, encryptData(content, key, iv), 'utf-8');
@@ -119,6 +119,10 @@ module.exports = function(context) {
     }
 
     function isCryptFile(file) {
+        if(fs.statSync(file).isDirectory()) {
+            return false;
+        }
+        file = file.replace(new RegExp('\\\\'), '/');
         if (!targetFiles.include.some(function(regexStr) { return new RegExp(regexStr).test(file); })) {
             return false;
         }
