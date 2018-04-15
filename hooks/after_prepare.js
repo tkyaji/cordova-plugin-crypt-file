@@ -8,7 +8,8 @@ module.exports = function(context) {
         platforms         = context.requireCordovaModule('cordova-lib/src/platforms/platforms'),
         Parser            = context.requireCordovaModule('cordova-lib/src/cordova/metadata/parser'),
         ParserHelper      = context.requireCordovaModule('cordova-lib/src/cordova/metadata/parserhelper/ParserHelper'),
-        ConfigParser      = context.requireCordovaModule('cordova-common').ConfigParser;
+        ConfigParser      = context.requireCordovaModule('cordova-common').ConfigParser,
+        isBinaryPath      = require('is-binary-path');
 
     var deferral = new Q.defer();
     var projectRoot = cordova_util.cdProjectRoot();
@@ -33,7 +34,12 @@ module.exports = function(context) {
         findCryptFiles(wwwDir).filter(function(file) {
             return isCryptFile(file.replace(wwwDir, ''));
         }).forEach(function(file) {
-            var content = fs.readFileSync(file, 'utf-8');
+            var content;
+            if (isBinaryPath(file)) {
+                content = fs.readFileSync(file);
+            } else {
+                content = fs.readFileSync(file, 'utf-8');
+            }
             fs.writeFileSync(file, encryptData(content, key, iv), 'utf-8');
             console.log('encrypt: ' + file);
         });
@@ -55,7 +61,12 @@ module.exports = function(context) {
             replaceCryptKey_ios(pluginDir, key, iv);
 
         } else if (platform == 'android') {
-            var pluginDir = path.join(platformPath, 'app/src/main/java');
+            var pluginDir;
+            if (7 <= parseInt(platformInfo.version.version)) {
+                pluginDir = path.join(platformPath, 'app/src/main/java');
+            } else {
+                pluginDir = path.join(platformPath, 'src');
+            }
             replaceCryptKey_android(pluginDir, key, iv);
 
             var cfg = new ConfigParser(platformInfo.projectConfig.path);

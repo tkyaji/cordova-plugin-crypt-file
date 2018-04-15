@@ -12,5 +12,8 @@
     "cordova-ios"
   ],
   "author": "tkyaji",
-  "license": "Apache version 2.0"
+  "license": "Apache version 2.0",
+  "dependencies": {
+    "is-binary-path": "^2.0.0"
+  }
 }
