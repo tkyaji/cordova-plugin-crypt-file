@@ -31,7 +31,7 @@ module.exports = function(context) {
         var wwwDir = platformInfo.locations.www;
 
         findCryptFiles(wwwDir).filter(function(file) {
-            return isCryptFile(file.replace(wwwDir, ''));
+            return fs.statSync(file).isFile() && isCryptFile(file.replace(wwwDir, ''));
         }).forEach(function(file) {
             var content = fs.readFileSync(file, 'utf-8');
             fs.writeFileSync(file, encryptData(content, key, iv), 'utf-8');
