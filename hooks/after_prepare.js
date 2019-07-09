@@ -1,11 +1,11 @@
 module.exports = function(context) {
 
-    var path = require('path'), fs = require('fs'), crypto = require('crypto'), Q = require('q');
-    
-    var cordova_util      = context.requireCordovaModule('cordova-lib/src/cordova/util'),
+    var path              = require('path'),
+        fs                = require('fs'),
+        crypto            = require('crypto'),
+        Q                 = require('q'),
+        cordova_util      = context.requireCordovaModule('cordova-lib/src/cordova/util'),
         platforms         = context.requireCordovaModule('cordova-lib/src/platforms/platforms'),
-        Parser            = context.requireCordovaModule('cordova-lib/src/cordova/metadata/parser'),
-        ParserHelper      = context.requireCordovaModule('cordova-lib/src/cordova/metadata/parserhelper/ParserHelper'),
         ConfigParser      = context.requireCordovaModule('cordova-common').ConfigParser;
 
     var deferral = new Q.defer();
@@ -53,15 +53,34 @@ module.exports = function(context) {
             replaceCryptKey_ios(pluginDir, key, iv);
 
         } else if (platform == 'android') {
-            var pluginDir = path.join(platformPath, 'app/src/main/java');
+            if(wwwDir.includes("main"))
+            {
+                var pluginDir = path.join(platformPath, 'app/src/main/java');
+            }
+            else
+            {
+                var pluginDir = path.join(platformPath, 'src');
+            }
             replaceCryptKey_android(pluginDir, key, iv);
 
             var cfg = new ConfigParser(platformInfo.projectConfig.path);
-            cfg.doc.getroot().getchildren().filter(function(child, idx, arr) {
-                return (child.tag == 'content');
-            }).forEach(function(child) {
-                child.attrib.src = '/+++/' + child.attrib.src;
-            });
+            var port = cfg.getGlobalPreference("cryptoPort");
+            if( port == '')
+            {
+                cfg.doc.getroot().getchildren().filter(function(child, idx, arr) {
+                    return (child.tag == 'content');
+                }).forEach(function(child) {
+                    child.attrib.src = 'http://localhost:8080/' + child.attrib.src;
+                });
+            }
+            else
+            {
+                cfg.doc.getroot().getchildren().filter(function(child, idx, arr) {
+                    return (child.tag == 'content');
+                }).forEach(function(child) {
+                    child.attrib.src = 'http://localhost:' + port + '/' + child.attrib.src;
+                });
+            }
 
             cfg.write();
         }
@@ -151,7 +170,7 @@ module.exports = function(context) {
     }
 
     function replaceCryptKey_android(pluginDir, key, iv) {
-        var sourceFile = path.join(pluginDir, '../app/src/main/java/com/tkyaji/cordova/DecryptResource.java');
+        var sourceFile = path.join(pluginDir, 'com/crypt/cordova/DecryptResource.java');
         var content = fs.readFileSync(sourceFile, 'utf-8');
 
         var includeArrStr = targetFiles.include.map(function(pattern) { return '"' + pattern.replace('\\', '\\\\') + '"'; }).join(', ');
