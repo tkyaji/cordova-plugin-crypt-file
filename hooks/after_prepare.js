@@ -1,6 +1,6 @@
 module.exports = function(context) {
 
-    var path = require('path'), fs = require('fs'), crypto = require('crypto'), Q = require('q'),
+    var path = require('path'), fs = require('fs'), crypto = require('crypto'), Q = require('q');
     
     var cordova_util      = context.requireCordovaModule('cordova-lib/src/cordova/util'),
         platforms         = context.requireCordovaModule('cordova-lib/src/platforms/platforms'),
