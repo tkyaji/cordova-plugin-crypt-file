@@ -1,13 +1,11 @@
 module.exports = function(context) {
 
-    var path              = context.requireCordovaModule('path'),
-        fs                = context.requireCordovaModule('fs'),
-        crypto            = context.requireCordovaModule('crypto'),
-        Q                 = context.requireCordovaModule('q'),
+    var path              = require('path'),
+        fs                = require('fs'),
+        crypto            = require('crypto'),
+        Q                 = require('q'),
         cordova_util      = context.requireCordovaModule('cordova-lib/src/cordova/util'),
         platforms         = context.requireCordovaModule('cordova-lib/src/platforms/platforms'),
-        Parser            = context.requireCordovaModule('cordova-lib/src/cordova/metadata/parser'),
-        ParserHelper      = context.requireCordovaModule('cordova-lib/src/cordova/metadata/parserhelper/ParserHelper'),
         ConfigParser      = context.requireCordovaModule('cordova-common').ConfigParser;
 
     var deferral = new Q.defer();
