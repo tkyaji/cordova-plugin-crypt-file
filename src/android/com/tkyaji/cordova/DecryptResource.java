@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.util.Base64;
 
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaPluginPathHandler;
 import org.apache.cordova.CordovaResourceApi;
 import org.apache.cordova.LOG;
 
