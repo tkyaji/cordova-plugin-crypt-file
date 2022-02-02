@@ -38,6 +38,8 @@
 		
         <source-file src="src/android/com/tkyaji/cordova/DecryptResource.java" target-dir="src/com/tkyaji/cordova" />
         <source-file src="src/android/com/tkyaji/cordova/DecryptCordovaPathHandler.java" target-dir="src/com/tkyaji/cordova" />
+
+        <framework src="androidx.webkit:webkit:${cordovaConfig.ANDROIDX_WEBKIT_VERSION}" />
     </platform>
 
     <cryptfiles>
