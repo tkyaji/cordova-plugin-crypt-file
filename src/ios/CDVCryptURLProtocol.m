@@ -13,13 +13,13 @@
 #import <CommonCrypto/CommonDigest.h>
 
 
-static NSString* const kCryptKey = @"";
-static NSString* const kCryptIv = @"";
+static NSString* const kCryptKey = @"X7fn1HZYyiCgtoY/fzTlcnS7DM00Isbo";
+static NSString* const kCryptIv = @"YiLfJKgdr+DWV+9r";
 
-static int const kIncludeFileLength = 0;
+static int const kIncludeFileLength = 1;
 static int const kExcludeFileLength = 0;
-static NSString* const kIncludeFiles[] = { };
-static NSString* const kExcludeFiles[] = { };
+static NSString* const kIncludeFiles[] = { @"\\.(htm|html|js|css)$" };
+static NSString* const kExcludeFiles[] = {  };
 
 
 @implementation CDVCryptURLProtocol
@@ -29,10 +29,15 @@ static NSString* const kExcludeFiles[] = { };
     if ([self checkCryptFile:theRequest.URL]) {
         return YES;
     }
-    
+
+    #ifdef HASCDVUrlProtocol
     return [super canInitWithRequest:theRequest];
+    #else
+    return NO;
+    #endif
 }
 
+#ifdef HASCDVUrlProtocol
 - (void)startLoading
 {
     NSURL* url = self.request.URL;
@@ -50,9 +55,14 @@ static NSString* const kExcludeFiles[] = { };
     
     [super startLoading];
 }
+#else
+- (NSData*)decryptContent:(NSString *)content {
+    return [self decryptAES256WithKey:kCryptKey iv:kCryptIv data:content];
+}
+#endif
 
 + (BOOL)checkCryptFile:(NSURL *)url {
-    if (![url.scheme isEqual: @"file"]) {
+    if (![url.scheme isEqual: @"app"]) {
         return NO;
     }
 
@@ -173,6 +183,7 @@ static NSString* const kExcludeFiles[] = { };
     return mimeType;
 }
 
+#ifdef HASCDVUrlProtocol
 - (void)sendResponseWithResponseCode:(NSInteger)statusCode data:(NSData*)data mimeType:(NSString*)mimeType
 {
     if (mimeType == nil) {
@@ -187,6 +198,6 @@ static NSString* const kExcludeFiles[] = { };
     }
     [[self client] URLProtocolDidFinishLoading:self];
 }
-
+#endif
 
 @end
