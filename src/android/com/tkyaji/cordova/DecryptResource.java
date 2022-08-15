@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.util.Base64;
 
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaPluginPathHandler;
 import org.apache.cordova.CordovaResourceApi;
 import org.apache.cordova.LOG;
 
@@ -28,6 +29,14 @@ public class DecryptResource extends CordovaPlugin {
     private static final String CRYPT_IV = "";
     private static final String[] INCLUDE_FILES = new String[] { };
     private static final String[] EXCLUDE_FILES = new String[] { };
+
+    @Override
+    public CordovaPluginPathHandler getPathHandler() {
+        return new CordovaPluginPathHandler(
+                new DecryptCordovaPathHandler(this.webView, this.cordova,
+                DecryptResource.INCLUDE_FILES, DecryptResource.EXCLUDE_FILES, 
+                    DecryptResource.CRYPT_KEY, DecryptResource.CRYPT_IV));
+    }
 
     @Override
     public Uri remapUri(Uri uri) {
@@ -79,7 +88,7 @@ public class DecryptResource extends CordovaPlugin {
     }
 
     private boolean isCryptFiles(String uri) {
-        String checkPath = uri.replace("file:///android_asset/www/", "");
+        String checkPath = uri.replace("file:///android_asset/www/", "").replace("www/", "");
         if (!this.hasMatch(checkPath, INCLUDE_FILES)) {
             return false;
         }
