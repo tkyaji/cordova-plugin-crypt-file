@@ -15,9 +15,6 @@
     </engines>
 
     <platform name="ios">
-        <preference name="scheme" value="app" />
-        <preference name="hostname" value="localhost" />
-
         <config-file target="config.xml" parent="/*">
 		    <feature name="CDVCrypt">
 			    <param name="ios-package" value="CDVCrypt"/>
